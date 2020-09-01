@@ -42,7 +42,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
 
   void togglePass() {
     setState(() {
-      print("Hi");
+      print("Hello");
     });
   }
 }
