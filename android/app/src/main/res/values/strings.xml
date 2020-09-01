@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">
+		Covid Care
+	</string>
+	<string name="facebook_app_id">
+		775859229624443
+	</string>
+	<string name="fb_login_protocol_scheme">
+		fb775859229624443
+	</string>
+</resources>
