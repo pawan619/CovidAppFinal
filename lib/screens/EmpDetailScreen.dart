@@ -1,9 +1,12 @@
 import 'package:covidCare/model/empDetail.dart';
+import 'package:covidCare/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:covidCare/services/database.dart';
 import 'package:covidCare/DataList/empDetailList.dart';
 import 'package:covidCare/model/emp.dart';
 import 'package:covidCare/widgets/list_item_builder.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:covidCare/ColorClass.dart';
 
 class EmpDetailScreen extends StatefulWidget {
   const EmpDetailScreen({@required this.database, @required this.emp});
@@ -27,17 +30,43 @@ class EmpDetailScreen extends StatefulWidget {
 class _EmpDetailScreenState extends State<EmpDetailScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Employee Detail Data'),
-        actions: <Widget>[],
-      ),
-      backgroundColor: Colors.white,
-      body: _buildContents(context, widget.emp),
+    return SafeArea(
+      child: Scaffold(
+//        backgroundColor: greyColor2,
+          appBar: AppBar(
+            centerTitle: true,
+            title: Text(
+              "Employee Details",
+              style: GoogleFonts.poppins(),
+            ),
+            flexibleSpace: Container(
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: <Color>[primaryColor, secondaryColor])),
+            ),
+          ),
+          body: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  height: 150,
+                  color: Colors.white,
+                  child: _card(widget.emp),
+                ),
+                Container(
+                  height: 400,
+                  color: Colors.white,
+                  child: _buildContents(context, widget.emp),
+                ),
+              ],
+            ),
+          )),
     );
   }
 
-  Widget _card() {
+  Widget _card(Emp emp) {
     return Container(
         padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
         height: 220,
@@ -46,31 +75,32 @@ class _EmpDetailScreenState extends State<EmpDetailScreen> {
             elevation: 5,
             child: Padding(
               padding: EdgeInsets.all(7),
-              child: Column(
-                children: [
-                  ListTile(
-                    leading: Icon(
-                      Icons.account_circle,
-                      size: 80.0,
-                    ),
-                    title: Text(
-                      'Sam                                         Teaching',
-                      style: TextStyle(color: Colors.black, fontSize: 18.0),
-                    ),
-                    subtitle: Text(
-                      'Mob No: 9988774545     Email: Sam@gmail.com',
-                      style: TextStyle(color: Colors.black, fontSize: 18.0),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
-                      style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                    ),
-                  ),
-                ],
-              ),
+              child: Row(children: <Widget>[
+                Icon(
+                  Icons.account_circle,
+                  size: 80.0,
+                ),
+                SizedBox(width: 5.0),
+                // Container(
+                new Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    //Column(children: <Widget>[
+                    Text(emp.name,
+                        textAlign: TextAlign.left,
+                        style: TextStyle(fontSize: 18.0, color: Colors.black)),
+                    SizedBox(height: 1.0),
+                    Text("Depart: " + emp.depart,
+                        style: TextStyle(fontSize: 16.0, color: Colors.black)),
+                    Text("Email: " + emp.email,
+                        style: TextStyle(fontSize: 16.0, color: Colors.black)),
+                    SizedBox(height: 1.0),
+                    Text("Phone no: " + emp.phone.toString(),
+                        textAlign: TextAlign.right,
+                        style: TextStyle(fontSize: 16.0, color: Colors.black)),
+                  ],
+                ),
+              ]),
             )));
   }
 
@@ -88,7 +118,5 @@ class _EmpDetailScreenState extends State<EmpDetailScreen> {
         );
       },
     );
-
-    //final database = Provider.of<Database>(context);
   }
 }

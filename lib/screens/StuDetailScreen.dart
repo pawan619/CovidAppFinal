@@ -5,6 +5,9 @@ import 'package:covidCare/services/database.dart';
 import 'package:covidCare/DataList/stuDetailList.dart';
 import 'package:covidCare/widgets/list_item_builder.dart';
 import 'package:covidCare/screens/StuDetailScreen.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:covidCare/ColorClass.dart';
+import 'package:covidCare/size_config.dart';
 
 class StuDetailScreen extends StatefulWidget {
   const StuDetailScreen({@required this.database, @required this.stu});
@@ -28,17 +31,52 @@ class StuDetailScreen extends StatefulWidget {
 class _StuDetailScreenState extends State<StuDetailScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return SafeArea(
+      child: Scaffold(
+//        backgroundColor: greyColor2,
+          appBar: AppBar(
+            centerTitle: true,
+            title: Text(
+              "Student Details",
+              style: GoogleFonts.poppins(),
+            ),
+            flexibleSpace: Container(
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: <Color>[primaryColor, secondaryColor])),
+            ),
+          ),
+          body: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  height: 150,
+                  color: Colors.white,
+                  child: _card(widget.stu),
+                ),
+                Container(
+                  height: 400,
+                  color: Colors.white,
+                  child: _buildContents(context, widget.stu),
+                ),
+              ],
+            ),
+          )),
+    );
+
+    /* return Scaffold(
       appBar: AppBar(
         title: Text('Student Detail Data'),
         actions: <Widget>[],
       ),
       backgroundColor: Colors.white,
-      body: _buildContents(context, widget.stu),
-    );
+     body: _buildContents(context, widget.stu),
+    );*/
   }
 
-  Widget _card() {
+  Widget _card(Stu stu) {
     return Container(
         padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
         height: 220,
@@ -47,31 +85,32 @@ class _StuDetailScreenState extends State<StuDetailScreen> {
             elevation: 5,
             child: Padding(
               padding: EdgeInsets.all(7),
-              child: Column(
-                children: [
-                  ListTile(
-                    leading: Icon(
-                      Icons.account_circle,
-                      size: 80.0,
-                    ),
-                    title: Text(
-                      'Sam                                         Teaching',
-                      style: TextStyle(color: Colors.black, fontSize: 18.0),
-                    ),
-                    subtitle: Text(
-                      'Mob No: 9988774545     Email: Sam@gmail.com',
-                      style: TextStyle(color: Colors.black, fontSize: 18.0),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
-                      style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                    ),
-                  ),
-                ],
-              ),
+              child: Row(children: <Widget>[
+                Icon(
+                  Icons.account_circle,
+                  size: 80.0,
+                ),
+                SizedBox(width: 5.0),
+                // Container(
+                new Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    //Column(children: <Widget>[
+                    Text(stu.name,
+                        textAlign: TextAlign.left,
+                        style: TextStyle(fontSize: 18.0, color: Colors.black)),
+                    SizedBox(height: 1.0),
+                    Text("Depart: " + stu.depart,
+                        style: TextStyle(fontSize: 16.0, color: Colors.black)),
+                    Text("Email: " + stu.email,
+                        style: TextStyle(fontSize: 16.0, color: Colors.black)),
+                    SizedBox(height: 1.0),
+                    Text("Phone no: " + stu.phone.toString(),
+                        textAlign: TextAlign.right,
+                        style: TextStyle(fontSize: 16.0, color: Colors.black)),
+                  ],
+                ),
+              ]),
             )));
   }
 

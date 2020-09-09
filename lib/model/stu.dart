@@ -6,9 +6,12 @@ class Stu {
       @required this.name,
       @required this.temp,
       @required this.depart,
-      @required this.mask});
-  final String id, name, depart, mask;
+      @required this.mask,
+      @required this.phone,
+      @required this.email});
+  final String id, name, depart, mask, email;
   final double temp;
+  final int phone;
 
   Map<String, dynamic> toMap() {
     return {
@@ -17,6 +20,8 @@ class Stu {
       's_temp': temp,
       's_depart': depart,
       's_mask': mask,
+      's_email': email,
+      's_phone': phone,
     };
   }
 }

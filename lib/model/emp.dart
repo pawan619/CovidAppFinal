@@ -6,9 +6,13 @@ class Emp {
       @required this.name,
       @required this.temp,
       @required this.depart,
-      @required this.mask});
-  final String id, name, depart, mask;
+      @required this.mask,
+      @required this.img,
+      @required this.phone,
+      @required this.email});
+  final String id, name, depart, mask, img, email;
   final double temp;
+  final int phone;
 
   Map<String, dynamic> toMap() {
     return {
@@ -17,6 +21,9 @@ class Emp {
       'emp_temp': temp,
       'emp_depart': depart,
       'emp_mask': mask,
+      'emp_img': img,
+      'emp_email': email,
+      'emp_phone': phone,
     };
   }
 }

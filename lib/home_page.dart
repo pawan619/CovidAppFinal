@@ -87,6 +87,7 @@ class HomePage extends StatelessWidget {
 
 import 'package:covidCare/screens/EmployeeScreen.dart';
 import 'package:covidCare/screens/StudentScreen.dart';
+import 'package:covidCare/screens/search.dart';
 import 'package:covidCare/size_config.dart';
 import 'package:covidCare/widgets/MyTextFormField_c.dart';
 import 'package:flutter/material.dart';
@@ -135,6 +136,11 @@ class _HomePageState extends State<HomePage> {
           EmployeeScreen(),
           StudentScreen(),
         ]),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.search),
+          onPressed: () => SearchData.show(context,
+              database: Provider.of<Database>(context)),
+        ),
       ),
     );
   }
