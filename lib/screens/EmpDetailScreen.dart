@@ -76,11 +76,17 @@ class _EmpDetailScreenState extends State<EmpDetailScreen> {
             child: Padding(
               padding: EdgeInsets.all(7),
               child: Row(children: <Widget>[
-                Icon(
-                  Icons.account_circle,
-                  size: 80.0,
-                ),
-                SizedBox(width: 5.0),
+                new Container(
+                    width: 100.0,
+                    height: 100.0,
+                    decoration: new BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: new DecorationImage(
+                            fit: BoxFit.fill,
+                            image: new NetworkImage(
+                              emp.img,
+                            )))),
+                SizedBox(width: 10.0),
                 // Container(
                 new Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,91 +1,4 @@
-/*import 'package:covidCare/Emps/empList.dart';
-import 'package:covidCare/model/emp.dart';
-import 'package:covidCare/services/auth.dart';
-import 'package:covidCare/services/database.dart';
-import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:provider/provider.dart';
-import 'package:covidCare/widgets/platform_alert_dialog.dart';
-
-class HomePage extends StatelessWidget {
-  Future<void> _signOut(BuildContext context) async {
-    try {
-      final auth = Provider.of<AuthBase>(context);
-      await auth.signOut();
-    } catch (e) {
-      print(e.toString());
-    }
-  }
-
-  Future<void> _confirmSignOut(BuildContext context) async {
-    final didRequestSignOut = await PlatformAlertDialog(
-      title: 'Logout',
-      content: 'Are you sure that you want to logout?',
-      cancelActionText: 'Cancel',
-      defaultActionText: 'Logout',
-    ).show(context);
-    if (didRequestSignOut == true) {
-      _signOut(context);
-    }
-  }
-
-  Future<void> _createEmp(BuildContext context) async {
-    final database = Provider.of<Database>(context);
-    await database.createEmp(Emp(
-        name: 'Bob', temp: 80.2, depart: 'Non-Teaching', mask: 'with Mask'));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    /*final database = Provider.of<Database>(context);
-    database.empStream();*/
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Covid Care'),
-        actions: <Widget>[
-          FlatButton(
-            child: Text(
-              'Logout',
-              style: TextStyle(
-                fontSize: 18.0,
-                color: Colors.white,
-              ),
-            ),
-            onPressed: () => _confirmSignOut(context),
-          ),
-        ],
-      ),
-      body: _buildContents(context),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () => _createEmp(context),
-      ),
-    );
-  }
-
-  Widget _buildContents(BuildContext context) {
-    final database = Provider.of<Database>(context);
-    return StreamBuilder<List<Emp>>(
-      stream: database.empStream(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final emps = snapshot.data;
-          final children = emps
-              .map((emp) => EmpList(
-                    emp: emp,
-                    onTap: () {},
-                  ))
-              .toList();
-          return ListView(children: children);
-        }
-        return Center(child: CircularProgressIndicator());
-      },
-    );
-  }
-}*/
-
-import 'package:covidCare/screens/EmployeeScreen.dart';
+/*import 'package:covidCare/screens/EmployeeScreen.dart';
 import 'package:covidCare/screens/StudentScreen.dart';
 import 'package:covidCare/screens/search.dart';
 import 'package:covidCare/size_config.dart';
@@ -194,10 +107,113 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+}*/
 
-  Widget searchBar() {
-    return MyTextFormField(
-      labelText: "Search",
+import 'package:covidCare/screens/EmployeeScreen.dart';
+import 'package:covidCare/screens/StudentScreen.dart';
+import 'package:covidCare/services/auth.dart';
+import 'package:covidCare/size_config.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'ColorClass.dart';
+import 'package:provider/provider.dart';
+import 'package:covidCare/widgets/platform_alert_dialog.dart';
+import 'package:covidCare/services/database.dart';
+import 'package:covidCare/screens/search.dart';
+
+class HomePage extends StatefulWidget {
+  Future<void> _signOut(BuildContext context) async {
+    try {
+      final auth = Provider.of<AuthBase>(context);
+      await auth.signOut();
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<void> _confirmSignOut(BuildContext context) async {
+    final didRequestSignOut = await PlatformAlertDialog(
+      title: 'Logout',
+      content: 'Are you sure that you want to logout?',
+      cancelActionText: 'Cancel',
+      defaultActionText: 'Logout',
+    ).show(context);
+    if (didRequestSignOut == true) {
+      _signOut(context);
+    }
+  }
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  Icon searchIcon = Icon(
+    Icons.search,
+    color: Colors.grey,
+  );
+  Widget appLogo = Image.asset("assets/images/ccLogo.png",
+      height: SizeConfig.imageSizeMultiplier * 10);
+  int _currentIndex = 0;
+  final List<Widget> _children = [EmployeeScreen(), StudentScreen()];
+  void onTabTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(SizeConfig.heightMultiplier * 10),
+          child: AppBar(
+            backgroundColor: Colors.white,
+            automaticallyImplyLeading: false,
+            title: appLogo,
+            actions: [
+              IconButton(
+                icon: searchIcon,
+                onPressed: () => SearchData.show(context,
+                    database: Provider.of<Database>(context)),
+              ),
+              SizedBox(width: SizeConfig.widthMultiplier * 2),
+              IconButton(
+                icon: Icon(
+                  Icons.power_settings_new,
+                  color: loginColor,
+                ),
+                onPressed: () => widget._confirmSignOut(context),
+              ),
+            ],
+          ),
+        ),
+        body: _children[_currentIndex],
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _currentIndex,
+          onTap: onTabTapped,
+          selectedItemColor: primaryColor,
+          type: BottomNavigationBarType.fixed,
+          items: [
+            BottomNavigationBarItem(
+              icon: ImageIcon(
+                AssetImage("assets/images/employeeWhite.png"),
+                size: SizeConfig.imageSizeMultiplier * 8,
+              ),
+              title: Text("Employees", style: GoogleFonts.poppins()),
+            ),
+            BottomNavigationBarItem(
+              icon: ImageIcon(
+                AssetImage("assets/images/studentWhite.png"),
+                size: SizeConfig.imageSizeMultiplier * 8,
+                // color: Colors.white,
+              ),
+              title: Text("Students", style: GoogleFonts.poppins()),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

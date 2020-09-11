@@ -53,7 +53,7 @@ class _SearchDataState extends State<SearchData> {
   String radioItem = 'Employee';
   int group = 1;
   String nameVal, fval, nval, tval, dval, mval;
-
+  String cat, catval;
   @override
   void initState() {
     _type = List.from(_type)..addAll(repo.getDataSource());
@@ -210,6 +210,7 @@ class _SearchDataState extends State<SearchData> {
 
   void _onSelectedType(String value) {
     setState(() {
+      namecontroller.text = "";
       _selectedDepartment = "Choose department..";
       _department = ["Choose department.."];
       _selectedType = value;
@@ -250,7 +251,7 @@ class _SearchDataState extends State<SearchData> {
                           onChanged: (T) {
                             radioItem = "Employee";
                             namecontroller.text = '';
-                            msg();
+
                             setState(() {
                               group = T;
                             });
@@ -265,7 +266,7 @@ class _SearchDataState extends State<SearchData> {
                           onChanged: (T) {
                             radioItem = "Student";
                             namecontroller.text = '';
-                            msg();
+
                             setState(() {
                               group = T;
                             });
@@ -323,7 +324,77 @@ class _SearchDataState extends State<SearchData> {
     }
     if (radioItem == 'Student' && namecontroller.text.isNotEmpty) {
       return StreamBuilder<List<Stu>>(
-        stream: widget.database.stuStreamSearch('s_name', fval),
+        stream: widget.database.stuStreamSearch('s_name', nval),
+        builder: (context, snapshot) {
+          return ListItemsBuilder<Stu>(
+              snapshot: snapshot,
+              itemBuilder: (context, stu) => StuList(
+                    stu: stu,
+                    onTap: () => StuDetailScreen.show(context, stu,
+                        database: widget.database),
+                  ));
+        },
+      );
+    }
+
+    if (_selectedType == 'Employee' &&
+        _selectedDepartment.isNotEmpty &&
+        _maskSelected == 'Choose mask status') {
+      return StreamBuilder<List<Emp>>(
+        stream:
+            widget.database.empStreamSearch('emp_depart', _selectedDepartment),
+        builder: (context, snapshot) {
+          return ListItemsBuilder<Emp>(
+              snapshot: snapshot,
+              itemBuilder: (context, emp) => EmpList(
+                    emp: emp,
+                    onTap: () => EmpDetailScreen.show(context, emp,
+                        database: widget.database),
+                  ));
+        },
+      );
+    }
+
+    if (_selectedType == 'Employee' &&
+        _selectedDepartment == "Choose department.." &&
+        _maskSelected.isNotEmpty) {
+      return StreamBuilder<List<Emp>>(
+        stream: widget.database.empStreamSearch('emp_mask', _maskSelected),
+        builder: (context, snapshot) {
+          return ListItemsBuilder<Emp>(
+              snapshot: snapshot,
+              itemBuilder: (context, emp) => EmpList(
+                    emp: emp,
+                    onTap: () => EmpDetailScreen.show(context, emp,
+                        database: widget.database),
+                  ));
+        },
+      );
+    }
+
+    if (_selectedType == 'Student' &&
+        _selectedDepartment.isNotEmpty &&
+        _maskSelected == 'Choose mask status') {
+      return StreamBuilder<List<Stu>>(
+        stream:
+            widget.database.stuStreamSearch('s_depart', _selectedDepartment),
+        builder: (context, snapshot) {
+          return ListItemsBuilder<Stu>(
+              snapshot: snapshot,
+              itemBuilder: (context, stu) => StuList(
+                    stu: stu,
+                    onTap: () => StuDetailScreen.show(context, stu,
+                        database: widget.database),
+                  ));
+        },
+      );
+    }
+
+    if (_selectedType == 'Student' &&
+        _selectedDepartment == "Choose department.." &&
+        _maskSelected.isNotEmpty) {
+      return StreamBuilder<List<Stu>>(
+        stream: widget.database.stuStreamSearch('s_mask', _maskSelected),
         builder: (context, snapshot) {
           return ListItemsBuilder<Stu>(
               snapshot: snapshot,
@@ -353,9 +424,23 @@ class _SearchDataState extends State<SearchData> {
         },
       );
     }
-  }
 
-  void msg() {
-    print(namecontroller.text);
+    if (_selectedType == 'Employee' &&
+        _selectedDepartment.isNotEmpty &&
+        _maskSelected.isNotEmpty) {
+      return StreamBuilder<List<Emp>>(
+        stream:
+            widget.database.empMultiSearch(_selectedDepartment, _maskSelected),
+        builder: (context, snapshot) {
+          return ListItemsBuilder<Emp>(
+              snapshot: snapshot,
+              itemBuilder: (context, emp) => EmpList(
+                    emp: emp,
+                    onTap: () => EmpDetailScreen.show(context, emp,
+                        database: widget.database),
+                  ));
+        },
+      );
+    }
   }
 }

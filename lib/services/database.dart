@@ -14,6 +14,7 @@ abstract class Database {
   Stream<List<Emp>> empStreamSearch(String cat, String catVal);
   Stream<List<Stu>> stuStreamSearch(String cat, String catVal);
   Stream<List<Stu>> stuMultiSearch(String dval, String mval);
+  Stream<List<Emp>> empMultiSearch(String dval, String mval);
 }
 
 class FirestoreDatabase implements Database {
@@ -39,9 +40,8 @@ class FirestoreDatabase implements Database {
 
   Stream<List<Emp>> empStreamSearch(String cat, String catVal) {
     final path = 'Employee';
-    final reference = Firestore.instance
-        .collection(path)
-        .where('emp_name', isEqualTo: '$catVal');
+    final reference =
+        Firestore.instance.collection(path).where('$cat', isEqualTo: '$catVal');
 
     final snapshots = reference.snapshots();
     return snapshots.map((snapshot) => snapshot.documents
@@ -104,6 +104,7 @@ class FirestoreDatabase implements Database {
             mask: snapshot.data['s_mask'],
             email: snapshot.data['s_email'],
             phone: snapshot.data['s_phone'],
+            img: snapshot.data['s_img'],
           ),
         )
         .toList());
@@ -111,9 +112,8 @@ class FirestoreDatabase implements Database {
 
   Stream<List<Stu>> stuStreamSearch(String cat, String catVal) {
     final path = 'Student';
-    final reference = Firestore.instance
-        .collection(path)
-        .where('s_name', isEqualTo: '$catVal');
+    final reference =
+        Firestore.instance.collection(path).where('$cat', isEqualTo: '$catVal');
     final snapshots = reference.snapshots();
     return snapshots.map((snapshot) => snapshot.documents
         .map(
@@ -125,6 +125,7 @@ class FirestoreDatabase implements Database {
             mask: snapshot.data['s_mask'],
             email: snapshot.data['s_email'],
             phone: snapshot.data['s_phone'],
+            img: snapshot.data['s_img'],
           ),
         )
         .toList());
@@ -147,6 +148,31 @@ class FirestoreDatabase implements Database {
             mask: snapshot.data['s_mask'],
             email: snapshot.data['s_email'],
             phone: snapshot.data['s_phone'],
+            img: snapshot.data['s_img'],
+          ),
+        )
+        .toList());
+  }
+
+  Stream<List<Emp>> empMultiSearch(String dval, String mval) {
+    final path = 'Employee';
+    final reference = Firestore.instance
+        .collection(path)
+        .where('emp_depart', isEqualTo: '$dval')
+        .where('emp_mask', isEqualTo: '$mval');
+
+    final snapshots = reference.snapshots();
+    return snapshots.map((snapshot) => snapshot.documents
+        .map(
+          (snapshot) => Emp(
+            id: snapshot.data['emp_id'],
+            name: snapshot.data['emp_name'],
+            temp: snapshot.data['emp_temp'],
+            depart: snapshot.data['emp_depart'],
+            mask: snapshot.data['emp_mask'],
+            img: snapshot.data['emp_img'],
+            email: snapshot.data['emp_email'],
+            phone: snapshot.data['emp_phone'],
           ),
         )
         .toList());

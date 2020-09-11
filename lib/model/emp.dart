@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 
 class Emp {
-  Emp(
-      {@required this.id,
-      @required this.name,
-      @required this.temp,
-      @required this.depart,
-      @required this.mask,
-      @required this.img,
-      @required this.phone,
-      @required this.email});
+  Emp({
+    @required this.id,
+    @required this.name,
+    @required this.temp,
+    @required this.depart,
+    @required this.mask,
+    @required this.img,
+    @required this.phone,
+    @required this.email,
+  });
   final String id, name, depart, mask, img, email;
   final double temp;
   final int phone;

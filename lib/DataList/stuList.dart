@@ -26,7 +26,17 @@ class StuList extends StatelessWidget {
         margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         child: Row(
           children: <Widget>[
-            Icon(Icons.account_circle, color: Colors.grey, size: 60),
+            new Container(
+                width: 60.0,
+                height: 60.0,
+                decoration: new BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: new DecorationImage(
+                        fit: BoxFit.fill,
+                        image: new NetworkImage(
+                          stu.img,
+                        )))),
+            //Icon(Icons.account_circle, color: Colors.grey, size: 60),
             Expanded(
               child: _buildContents(context),
             ),
